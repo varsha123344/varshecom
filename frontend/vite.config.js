@@ -5,7 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'https://varshecom.onrender.com',
+      '/api': {
+        target: 'https://varshecom.onrender.com',
+        changeOrigin: true,
+      },
     },
   },
 });
