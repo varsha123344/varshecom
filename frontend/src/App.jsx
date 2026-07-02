@@ -15,6 +15,9 @@ import Footer from './components/Footer';
 import { filterProducts, getDisplayPrice, sortProducts } from './utils/productHelpers';
 
 export default function App() {
+  const API_BASE = import.meta.env.VITE_API_URL ?? (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? '' : 'https://varshecom.onrender.com');
+
+  const api = (path) => (API_BASE ? `${API_BASE}${path}` : path);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,7 +35,7 @@ export default function App() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const handleAddProduct = async (productData) => {
    try {
-    const response = await fetch('/api/products', {
+    const response = await fetch(api('/api/products'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +62,7 @@ export default function App() {
 
  const handleEditProduct = async (id, productData) => {
   try {
-    const response = await fetch(`/api/products/${id}`, {
+    const response = await fetch(api(`/api/products/${id}`), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -89,12 +92,7 @@ export default function App() {
 }
  const handleDeleteProduct = async (id) => {
   try {
-    const response = await fetch(
-      `/api/products/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
+    const response = await fetch(api(`/api/products/${id}`), { method: 'DELETE' });
 
     if (!response.ok) {
       throw new Error('Failed to delete');
@@ -116,7 +114,7 @@ export default function App() {
   // Fetch products
   const fetchProducts = async () => {
     try {
-      const res = await fetch('https://varshecom.onrender.com/api/products');
+      const res = await fetch(api('/api/products'));
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -125,7 +123,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    fetch('/api/products')
+    fetch(api('/api/products'))
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load products');
         return res.json();
