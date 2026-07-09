@@ -75,8 +75,9 @@ export default function EditProductModal({
         </button>
 
         <div className="modal-content">
-          <h2>Edit Product</h2>
-
+          <h2 className="form-title">
+             Edit Product
+          </h2>
           <div
             style={{
               display: 'flex',

@@ -1,4 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from "react";
+
+import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 
 export default function Header({
   cartCount,
@@ -10,99 +22,74 @@ export default function Header({
   const [showMenu, setShowMenu] = useState(false);
   const [showProductMenu, setShowProductMenu] = useState(false);
 
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+        setShowProductMenu(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className="site-header">
+
       <div className="promo-bar">
-        Free shipping on orders over $75 · 30-day easy returns
+        <LocalShippingOutlinedIcon sx={{ fontSize: 18 }} />
+        <span>Free Shipping on Orders Over $75 • 30 Day Easy Returns</span>
       </div>
 
       <div className="header-main">
+
         <div className="header-inner">
+
           <a href="/" className="logo">
-            <span className="logo-mark">◆</span>
-            <span className="logo-text">ShopVault</span>
+            <span className="logo-mark">⬢</span>
+
+            <span className="logo-text">
+              ShopVault
+            </span>
           </a>
 
-          <nav className="nav-links" aria-label="Main navigation">
-            <a href="#shop">Shop</a>
+          <nav className="nav-links">
+
+            <a href="/">Home</a>
+
             <a href="#featured">Featured</a>
+
             <a href="#categories">Categories</a>
+
             <a href="#deals">Deals</a>
+
           </nav>
 
           <div className="header-actions">
 
-            {/* Account Menu */}
-            <div className="account-menu">
-              <button
-                type="button"
-                className="icon-btn"
-                aria-label="Account"
-                onClick={() => setShowMenu(!showMenu)}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
-                </svg>
-              </button>
-
-              {showMenu && (
-                <div className="profile-dropdown">
-                  <button>👤 My Profile</button>
-
-                  <button>📦 Orders</button>
-
-                  <button>❤️ Wishlist</button>
-
-                  <button>⚙️ Settings</button>
-
-                  <button
-                    onClick={() =>
-                      setShowProductMenu(!showProductMenu)
-                    }
-                  >
-                    🛠 Product Management ▶
-                  </button>
-
-                  {showProductMenu && (
-                    <div className="submenu">
-                      <button onClick={onAddClick}>
-                        + Add Product
-                      </button>
-
-                      <button onClick={onEditClick}>
-                        ✏ Edit Product
-                      </button>
-
-                      <button onClick={onDeleteClick}>
-                        🗑 Delete Product
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
             {/* Wishlist */}
+
             <button
-              type="button"
               className="icon-btn"
               aria-label="Wishlist"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 21s-7-4.35-9.33-8.5C.8 9.24 2.09 6 5.09 6A4.09 4.09 0 0 1 9 8.09 4.09 4.09 0 0 1 12.91 6c3 0 4.29 3.24 2.42 6.5C19 16.65 12 21 12 21Z" />
-              </svg>
+              <FavoriteBorderRoundedIcon />
             </button>
 
             {/* Cart */}
+
             <button
-              type="button"
               className="icon-btn cart-btn"
-              aria-label={`Cart, ${cartCount} items`}
               onClick={onCartClick}
+              aria-label="Cart"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44A2 2 0 0 0 10 18h9v-2h-8.42a.25.25 0 0 1-.22-.37L11 13h6.55a2 2 0 0 0 1.92-1.45L22 6H6.21l-.94-2ZM7 20a2 2 0 1 0 2-2 2 2 0 0 0-2 2Zm10 0a2 2 0 1 0 2-2 2 2 0 0 0-2 2Z" />
-              </svg>
+              <ShoppingCartOutlinedIcon />
 
               {cartCount > 0 && (
                 <span className="cart-count">
@@ -111,9 +98,111 @@ export default function Header({
               )}
             </button>
 
+            {/* Profile */}
+
+            <div
+              className="account-menu"
+              ref={menuRef}
+            >
+
+              <button
+                className="icon-btn profile-btn"
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                <PersonOutlineRoundedIcon />
+
+                <KeyboardArrowDownRoundedIcon
+                  className={showMenu ? "rotate" : ""}
+                />
+              </button>
+
+              {showMenu && (
+
+                <div className="profile-dropdown">
+
+                  <button className="menu-item">
+                    <PersonOutlineRoundedIcon fontSize="small" />
+                    <span>My Profile</span>
+                  </button>
+
+                  <button className="menu-item">
+                    <LocalShippingOutlinedIcon fontSize="small" />
+                    <span>Orders</span>
+                  </button>
+
+                  <button className="menu-item">
+                    <FavoriteRoundedIcon fontSize="small" />
+                    <span>Wishlist</span>
+                  </button>
+
+                  <button className="menu-item">
+                    <SettingsOutlinedIcon fontSize="small" />
+                    <span>Settings</span>
+                  </button>
+
+                  <button
+                    className="menu-item"
+                    onClick={() =>
+                      setShowProductMenu(!showProductMenu)
+                    }
+                  >
+
+                    <Inventory2OutlinedIcon fontSize="small" />
+
+                    <span>
+                      Product Management
+                    </span>
+
+                    <KeyboardArrowDownRoundedIcon
+                      className={showProductMenu ? "rotate" : ""}
+                    />
+
+                  </button>
+
+                  {showProductMenu && (
+
+                    <div className="submenu">
+
+                      <button
+                        className="submenu-item"
+                        onClick={onAddClick}
+                      >
+                        <AddBoxOutlinedIcon fontSize="small" />
+                        Add Product
+                      </button>
+
+                      <button
+                        className="submenu-item"
+                        onClick={onEditClick}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                        Edit Product
+                      </button>
+
+                      <button
+                        className="submenu-item delete"
+                        onClick={onDeleteClick}
+                      >
+                        <DeleteOutlineOutlinedIcon fontSize="small" />
+                        Delete Product
+                      </button>
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              )}
+
+            </div>
+
           </div>
+
         </div>
+
       </div>
+
     </header>
   );
 }

@@ -15,7 +15,7 @@ import Footer from './components/Footer';
 import { filterProducts, getDisplayPrice, sortProducts } from './utils/productHelpers';
 
 export default function App() {
-  const API_BASE = import.meta.env.VITE_API_URL ?? (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? '' : 'https://varshecom.onrender.com');
+  const API_BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? '' : 'https://varshecom.onrender.com');
 
   const api = (path) => (API_BASE ? `${API_BASE}${path}` : path);
   const [products, setProducts] = useState([]);

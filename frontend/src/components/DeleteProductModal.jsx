@@ -39,7 +39,9 @@ export default function DeleteProductModal({
         </button>
 
         <div className="modal-content">
-          <h2>Delete Product</h2>
+          <h2 className="form-title">
+             Delete Product
+          </h2>
 
           <div
             style={{

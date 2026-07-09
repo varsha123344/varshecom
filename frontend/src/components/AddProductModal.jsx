@@ -60,7 +60,9 @@ export default function AddProductModal({
         </button>
 
         <div className="modal-content">
-          <h2>Add Product</h2>
+          <h2 className="form-title">
+           Add Product
+           </h2>
 
           <div
             style={{
